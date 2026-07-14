@@ -1,0 +1,188 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id ="Login" action="/login" method="post">
+        <label for="Email"></label><input type="email" name="email" id="" placeholder="Enter Email">
+        <label for="Password"></label><input type="password" name="Password" id="" placeholder="Enter password">
+        <button type="button" onclick="login()">Login</button>
+    </form>
+    <p>New User?</p>
+    <a href="signup.html">SignUP</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="login.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5f7fb;
+      padding: 20px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .heading {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .heading h1 {
+      font-size: 42px;
+      font-weight: 700;
+      color: #1f1f1f;
+      margin-bottom: 10px;
+    }
+
+    .heading p {
+      font-size: 18px;
+      color: #666;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e6e6e6;
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    #Login {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    #Login label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    #Login input {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 16px;
+      outline: none;
+      background: #fff;
+      transition: 0.3s ease;
+      margin-top: 8px;
+    }
+
+    #Login input::placeholder {
+      color: #999;
+    }
+
+    #Login input:focus {
+      border-color: #111;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+    }
+
+    #Login button {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      background: #111;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+      margin-top: 8px;
+    }
+
+    #Login button:hover {
+      background: #000;
+    }
+
+    .bottom-text {
+      text-align: center;
+      margin-top: 22px;
+      color: #555;
+      font-size: 15px;
+    }
+
+    .bottom-text a {
+      color: #111;
+      font-weight: 700;
+      text-decoration: none;
+      margin-left: 6px;
+    }
+
+    .bottom-text a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .heading h1 {
+        font-size: 32px;
+      }
+
+      .card {
+        padding: 24px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="heading">
+      <h1>Welcome Back</h1>
+      <p>Sign in to your account to continue</p>
+    </div>
+
+    <div class="card">
+      <form id="Login" action="/login" method="post">
+        <div>
+          <label for="Email">Email</label>
+          <input type="email" name="email" id="" placeholder="Enter Email">
+        </div>
+
+        <div>
+          <label for="Password">Password</label>
+          <input type="password" name="Password" id="" placeholder="Enter password">
+        </div>
+
+        <button type="button" onclick="login()">Login</button>
+      </form>
+
+      <div class="bottom-text">
+        <p>New User? <a href="signup.html">SignUP</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>
