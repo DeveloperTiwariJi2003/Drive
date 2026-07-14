@@ -68,7 +68,7 @@ async function showFiles() {
             btn.addEventListener("click",async (e)=>{
                 const id = e.currentTarget.dataset.id;
                 console.log(id);
-                await axios.delete(`${API}/file/${id}`,authHeader);
+                await axios.delete(`${API}/api/file/${id}`,authHeader);
                 li.remove();
             })
 
