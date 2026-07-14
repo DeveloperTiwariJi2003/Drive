@@ -1,3 +1,7 @@
+const API =
+    window.location.hostname === "localhost"
+        ? "http://localhost:5000"
+        : "";
 async function signUp(){
     const alert_message = document.getElementById('alert')
     try {
@@ -5,9 +9,10 @@ async function signUp(){
         
     const formdata = new FormData(form);
     const data = Object.fromEntries(formdata.entries());
-    const res = await axios.post("http://localhost:5000/signup",data);
-    window.location.href = 'http://localhost:5000/login.html';
-     alert("account created successfully");//////i was dping alert message on frontend 
+    const res = await axios.post(`${API}/signup`,data);
+    alert("account created successfully");//////i was dping alert message on frontend 
+    window.location.href = `${API}/login.html`;
+     
     console.log(res);
     } catch (error) {
         if(error.response?.status==409){
@@ -18,5 +23,5 @@ async function signUp(){
     }
 }
 async function login(){
-    window.location.href = 'http://localhost:5000/login.html';
+    window.location.href = `${API}/login.html`;
 }

@@ -1,15 +1,18 @@
 const token = localStorage.getItem("token");
 const authHeader = {headers: {Authorization: `Bearer ${token}`}};
-
+const API =
+    window.location.hostname === "localhost"
+        ? "http://localhost:5000"
+        : "";
 if (!token) {
-    window.location.href = 'http://localhost:5000/login.html';
+    window.location.href = `${API}/login.html`;
 }
 async function sendData() {
     // console.log("running send data");
     const file = document.getElementById("file").files[0];
     const formData = new FormData();
     formData.append("data", file);
-    const res = await axios.post("http://localhost:5000/api/upload", formData,authHeader);
+    const res = await axios.post(`${API}/api/upload`, formData,authHeader);
     const confirmation = document.getElementById("confirmation");
     confirmation.innerText = "File(s) uploaded successfully";
     showFiles();
@@ -22,7 +25,7 @@ async function showFiles() {
     try {
 
          res = await axios.get(
-            "http://localhost:5000/api/files",
+            `${API}/api/files`,
             authHeader
         );
 
@@ -50,7 +53,7 @@ async function showFiles() {
         dwnld.innerText="Download";
         if (file.MimeType.startsWith("image/")) {
             const img = document.createElement('img');
-            img.src = `http://localhost:5000/${file.path}`;
+            img.src = `${API}/${file.path}`;
             img.style.width = "150px";
             img.style.margin = "10px";
             btn.id = "delete";
@@ -59,13 +62,13 @@ async function showFiles() {
             // console.log(file._id);
             // console.log(btn);
             const a = document.createElement('a');
-            a.href = `http://localhost:5000/${file.path}`;
+            a.href = `${API}/${file.path}`;
             // a.innerText = file.filename
             a.target = "_blank";
             btn.addEventListener("click",async (e)=>{
                 const id = e.currentTarget.dataset.id;
                 console.log(id);
-                await axios.delete(`http://localhost:5000/api/file/${id}`,authHeader);
+                await axios.delete(`${API}/file/${id}`,authHeader);
                 li.remove();
             })
 
@@ -76,7 +79,7 @@ async function showFiles() {
             ul.appendChild(li);
         } else if (file.MimeType === "application/pdf") {
             const iframe = document.createElement("iframe");
-            iframe.src = `http://localhost:5000/${file.path}#toolbar=0`;
+            iframe.src = `${API}/${file.path}#toolbar=0`;
             iframe.width = "100";
             iframe.height = "100";
             btn.id = "delete";
@@ -84,7 +87,7 @@ async function showFiles() {
             btn.innerText = "delete";
             // iframe.style.overflow = "hidden";
             const link = document.createElement("a");
-            link.href = `http://localhost:5000/${file.path}`;
+            link.href = `${API}/${file.path}`;
             link.innerText = "Open PDF";
             link.target = "_blank";
             console.log(btn);
@@ -92,7 +95,7 @@ async function showFiles() {
             btn.addEventListener("click",async (e)=>{
                 const id = e.currentTarget.dataset.id;
                 console.log(id);
-                await axios.delete(`http://localhost:5000/api/file/${id}`,authHeader);
+                await axios.delete(`${API}/api/file/${id}`,authHeader);
                 li.remove();
             })
             li.appendChild(iframe);
@@ -111,7 +114,7 @@ async function sendManyFiles(){
     formData.append("files", file);
 }
 const confirmation = document.getElementById("confirmation");
-    await axios.post(`http://localhost:5000/api/uploadMany`, formData,authHeader);
+    await axios.post(`${API}/api/uploadMany`, formData,authHeader);
     
     confirmation.innerText = "File(s) uploaded successfully";
     showFiles();

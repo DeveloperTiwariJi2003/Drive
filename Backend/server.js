@@ -1,5 +1,5 @@
-const express = require("express");
 const cors = require("cors");
+const express = require("express");
 const app = express();
 const connectDB = require('./db.js');
 const path = require("path");
@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, '../Frontend')));
 app.use(cors());
 const fileRoutes = require("./routes/fileRoutes.js");
 app.use(fileRoutes);
-app.listen(5000, () => {
-  console.log("server is up at port", 5000);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`server is up at port ${PORT}`);
 })
