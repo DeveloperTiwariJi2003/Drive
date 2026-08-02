@@ -9,4 +9,5 @@ router.get('/api/files',auth,fileController.get_files);
 router.post('/api/upload',auth, upload.single('data'),fileController.upload_single);
 router.post('/api/uploadMany',auth, upload.array('files', 100),fileController.upload_multiple);
 router.delete('/api/file/:id',auth,fileController.delete_file);
+router.post('/api/deleteMany',auth,fileController.deleteselected);
 module.exports = router;

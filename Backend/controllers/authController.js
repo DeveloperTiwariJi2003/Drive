@@ -25,6 +25,7 @@ async function signup(req,res){
 }
 
 async function login(req,res){
+    // console.log(req.body);
     const { email, Password } = req.body;
         const FindUser = await user.findOne({ email });
         if (!FindUser) {
@@ -34,9 +35,9 @@ async function login(req,res){
             });
         }
     
-        console.log(req.body);
-        console.log("Password from frontend:", Password);
-        console.log("Password from DB:", FindUser.password);
+        // console.log(req.body);
+        // console.log("Password from frontend:", Password);
+        // console.log("Password from DB:", FindUser.password);
         const isUserMatched = await bcrypt.compare(Password, FindUser.password);
         if (!isUserMatched) {
             return res.status(401).json({
@@ -44,8 +45,10 @@ async function login(req,res){
                 message: "Invalid credentials"
             });
         }
+        //console.log("finduser:",FindUser); // finduser have the userid by FindUser._id
+        // console.log(FindUser._id);
         const token = jwt.sign({ userId: FindUser._id }, process.env.Key, { expiresIn: '10m' });
-        console.log(FindUser);
+        // console.log(FindUser);
         res.json({ success: true, token });
 }
 module.exports={
