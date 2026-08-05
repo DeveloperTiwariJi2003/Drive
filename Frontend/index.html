@@ -54,14 +54,6 @@
       padding: 18px;
     }
 
-    #files {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 10px;
-      list-style: none;
-      padding: 0;
-    }
-
     .file-card {
       display: flex;
       flex-direction: column;
@@ -176,7 +168,7 @@
     }
 
     #confirmation {
-      margin-top: 16px;
+      margin-top: 1px;
       font-size: 15px;
       font-weight: 600;
       color: #0a7a2f;
@@ -185,7 +177,24 @@
     .spin {
     animation: spin 1s linear infinite;
 }
+  #files {
+    column-count: 5;
+    column-gap: 10px;
+    list-style: none;
+    padding: 0;
+}
 
+.photo-item {
+    break-inside: avoid;
+    margin-bottom: 10px;
+}
+
+.photo-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
 @keyframes spin {
     to {
         transform: rotate(360deg);
@@ -194,6 +203,26 @@
 
 #refreshIcon {
     cursor: pointer;
+}
+.photo-card {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background: rgba(0,0,0,.5);
+    color: white;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+}
+
+.menu-btn:hover {
+    background: rgba(0,0,0,.8);
 }
     @media (max-width: 640px) {
       .ribbon {
@@ -229,7 +258,7 @@
           <input type="file" name="data" id="Manyfile" class="form-control" style="width:250px;"
             value="select files to upload" multiple />
 
-          <button id="uploadBtn" type="button" class="upload-btn btn btn-primary d-none" onclick="sendManyFiles();">
+          <button id="uploadBtn" type="button" class="btn btn-dark d-none" onclick="sendManyFiles();">
             Upload
           </button>
           <i id="refreshIcon" class="bi bi-arrow-repeat"></i>
@@ -267,30 +296,18 @@
 
 
   <div class="dashboard">
-    <div class="header">
-      <h1>Dashboard</h1>
-      <p>Upload multiple files from the ribbon bar below.</p>
-    </div>
-
     <button id="DeleteSelectedBtn" type="button" onclick="DeleteSelected()" style="display:none; ">Delete Files</button>
     <div>
-      <!-- <div class="panel">
-        <div><progress id="progressBar" value="0" max="100"></progress>
-          <p id="progressText"></p>
-        </div>
-      </div> -->
       <div id="confirmation"></div>
-
       <h2>Uploaded Files</h2>
-      <p class="subtext">Files will appear here after you click showFiles.</p>
+      <!-- cards will appear in ul  -->
       <ul id="files">
-
       </ul>
-
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 

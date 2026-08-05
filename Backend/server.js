@@ -8,7 +8,7 @@ require("dotenv").config();
 connectDB();
 const authRoutes = require("./routes/authRoutes.js");
 app.use(authRoutes);
-app.use("/uploads",express.static(path.join(__dirname, "uploads")));//mr shivam esc-26-7-18
+app.use("/uploads",express.static(path.join(__dirname, "uploads")));
 // console.log(path.join(__dirname, "uploads"));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/login.html'));

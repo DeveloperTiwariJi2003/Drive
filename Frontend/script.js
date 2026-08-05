@@ -58,7 +58,8 @@ async function showFiles() {
         checkbox.type = "checkbox";
         checkbox.style.display = selection_mode ? "block" : "none";
         const li = document.createElement('li');
-        li.classList.add("file-card");
+        li.classList.add("photo-item");
+        li.classList.add("photo-card");
         const id = file._id;
         li.dataset.id = file._id;
         checkbox.dataset.id = file._id;
@@ -119,6 +120,22 @@ async function showFiles() {
 
             a.appendChild(img);
             li.appendChild(a);
+            const dropdown = document.createElement("div");
+
+dropdown.innerHTML = `
+<div class="dropdown">
+    <button class="menu-btn" data-bs-toggle="dropdown">
+        <i class="bi bi-three-dots-vertical"></i>
+    </button>
+
+    <ul class="dropdown-menu">
+        <li><button class="dropdown-item download-btn">Download</button></li>
+        <li><button class="dropdown-item delete-btn text-danger">Delete</button></li>
+    </ul>
+</div>
+`;
+
+li.appendChild(dropdown.firstElementChild);
             // li.appendChild(delete_btn);
             // li.appendChild(dwnld);
             li.appendChild(button_div);
@@ -148,7 +165,36 @@ async function showFiles() {
             li.appendChild(link);
             li.appendChild(delete_btn);
             ul.appendChild(li);
-        }
+        }else if (file.MimeType.startsWith("video/")) {
+
+    const video = document.createElement("video");
+    video.src = `${API}/${file.path}`;
+    video.controls = true;
+    video.width = 200;
+    video.preload = "metadata";
+
+    delete_btn.id = "delete";
+    delete_btn.dataset.id = id;
+    delete_btn.innerText = "Delete";
+
+    delete_btn.addEventListener("click", async (e) => {
+        const id = e.currentTarget.dataset.id;
+        await axios.delete(`${API}/api/file/${id}`, authHeader);
+        li.remove();
+    });
+
+    const a = document.createElement("a");
+    a.href = `${API}/${file.path}`;
+    a.target = "_blank";
+
+    a.appendChild(video);
+
+    li.appendChild(a);
+    li.appendChild(button_div);
+    li.appendChild(checkbox);
+
+    ul.appendChild(li);
+}
     }
 }
 // showFiles();
@@ -156,22 +202,21 @@ async function sendManyFiles() {
     const file_input_field = document.getElementById("Manyfile");
     const files = document.getElementById("Manyfile").files;
     const formData = new FormData();
-    const Show_percent_on_frontend = document.getElementById("percent");
+    // const Show_percent_on_frontend = document.getElementById("percent");
     for (let file of files) {
         formData.append("files", file);
     }
-    const confirmation = document.getElementById("confirmation");
+    
 
-    await axios.post(`${API}/api/uploadMany`, formData, {
-        ...authHeader, onUploadProgress: function (progressEvent) {
+    await axios.post(`${API}/api/uploadMany`, formData, {...authHeader, onUploadProgress: function (progressEvent) {
             // console.log(progressEvent);
-
+const confirmation = document.getElementById("confirmation");
             const percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
             document.getElementById("progressBar").style.width = `${percent}%`;
              document.getElementById("progressBar").innerText = `${percent}%`;
-            document.getElementById("progressText").textContent = `${percent}%`;
+            // document.getElementById("progressText").textContent = `${percent}%`;
             // console.log(percent);
-            // Show_percent_on_frontend.innerText = percent;
+            // Show_percent_on_frontend.innerText = percent;   
             if (progressEvent.upload == true) {
                 confirmation.innerText = "File(s) uploaded successfully";
                 file_input_field.value = "";
