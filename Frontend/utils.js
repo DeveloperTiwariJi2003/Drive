@@ -29,9 +29,9 @@ if ((willOverflow && enoughImages) || tooManyImages) {
         for(let image of imageContainer){
             image.finalHeight=finalHeight;
             image.finalWidth=image.temp_width*scaleFactor
-            console.log(imageContainer);
+            // console.log(imageContainer);
         }
-        console.log("conatiner emptied");
+        // console.log("conatiner emptied");
         rows.push([...imageContainer]);
         imageContainer=[];
         Container = 0;
@@ -50,11 +50,11 @@ if (imageContainer.length > 0) {
         image.finalHeight = target_height;
         image.finalWidth = image.temp_width; // already calculated at target_height
 
-        console.log(
-            "Last Row ->",
-            "Height =", image.finalHeight,
-            "Width =", image.finalWidth
-        );
+        // console.log(
+        //     "Last Row ->",
+        //     "Height =", image.finalHeight,
+        //     "Width =", image.finalWidth
+        // );
     }
     rows.push([...imageContainer]);
     

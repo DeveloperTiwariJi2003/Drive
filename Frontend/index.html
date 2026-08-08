@@ -32,11 +32,8 @@
         <button id="selectBtn" type="button" class="btn btn-primary" >Select</button>
         <form id="uploadForm" class="d-flex align-items-center gap-2">
 
-          <input type="file" name="data" id="Manyfile" class="form-control Manyfile" style="width:250px;"
-            value="select files to upload" multiple />
-          <button id="uploadBtn" type="button" class="btn btn-dark d-none">
-            Upload
-          </button>
+          <input type="file" name="data" id="Manyfile" class="form-control" style="width:250px;"value="select files to upload" multiple />
+          <button id="uploadBtn" type="button" class="btn btn-dark d-none">Upload</button>
           <i id="refreshIcon" class="bi bi-arrow-repeat"></i>
         </form>
         <!-- Search Form -->
@@ -65,8 +62,8 @@
 
     <!-- Hidden upload input for mobile -->
     <div class="flex" id="mobileUpload">
-      <input type="file">
-      <button id="hiddenuploadBtn" type="button" class="Manyfile btn btn-primary">upload</button>
+      <input type="file"  name="data"  id="mobileManyFiles" class="form-control" multiple>
+      <button id="mobileuploadButton" type="button" class=" btn btn-primary">upload</button>
     </div>
 
     <!-- Hidden search input for mobile this is ok-->
