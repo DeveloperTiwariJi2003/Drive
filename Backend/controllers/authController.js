@@ -47,7 +47,7 @@ async function login(req,res){
         }
         //console.log("finduser:",FindUser); // finduser have the userid by FindUser._id
         // console.log(FindUser._id);
-        const token = jwt.sign({ userId: FindUser._id }, process.env.Key, { expiresIn: '10m' });
+        const token = jwt.sign({ userId: FindUser._id }, process.env.Key, { expiresIn: '30m' });
         // console.log(FindUser);
         res.json({ success: true, token });
 }

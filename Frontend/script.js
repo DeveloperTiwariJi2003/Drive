@@ -1,4 +1,5 @@
 const token = localStorage.getItem("token");
+import {gallery_layout} from './utils.js';
 const authHeader = { headers: { Authorization: `Bearer ${token}` } };
 const API =
     window.location.hostname === "localhost"
@@ -33,6 +34,14 @@ function toggleSelectionMode() {   //this one is for select and cancel button
     });
     // showFiles();
 }
+const selectBtn = document.getElementById("selectBtn");
+selectBtn.addEventListener("click",()=>{
+    toggleSelectionMode();
+})
+const mobileSelectBtn = document.getElementById("mobileSelectBtn");
+mobileSelectBtn.addEventListener("click",()=>{
+    toggleSelectionMode();
+})
 async function showFiles() {
     let res;
     try {
@@ -50,11 +59,24 @@ async function showFiles() {
         }
 
     }
+    // console.log("res.data = " , res.data);
+    const gallery = document.getElementById("files");
+    const desiredImages = gallery.clientWidth < 600 ? 5 : 10;
+
+    const targetHeight = gallery.clientWidth / desiredImages;
+    
+    const layout = gallery_layout(res.data, gallery.clientWidth, targetHeight);
+    console.log(layout);
     const ul = document.getElementById('files');
     ul.innerHTML = "";
 
-    for (const file of res.data) {
-        const checkbox = document.createElement("input");
+    for (const row of layout) {
+        
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "gallery-row";
+
+        for(const file of row){
+            const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.style.display = selection_mode ? "block" : "none";
         const li = document.createElement('li');
@@ -63,7 +85,7 @@ async function showFiles() {
         const id = file._id;
         li.dataset.id = file._id;
         checkbox.dataset.id = file._id;
-
+            checkbox.id= "check";
 
         checkbox.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -91,25 +113,48 @@ async function showFiles() {
         const delete_btn = document.createElement('button');//btn
         delete_btn.type = "button";
         const dwnld = document.createElement('button');
-        delete_btn.className=""
         dwnld.type = "button";
         dwnld.innerText = "Download";
 
-        const button_div=document.createElement("div");
-        button_div.className=("button_ddiv");
+        const button_div = document.createElement("div");
+        button_div.className = ("button_ddiv");
         button_div.appendChild(delete_btn);
         button_div.appendChild(dwnld);
-        if (file.MimeType.startsWith("image/")) {
+
+
+        const dropdown = document.createElement("div");
+
+        
+            if (file.MimeType.startsWith("image/")) {
+            
             const img = document.createElement('img');
             img.src = `${API}/${file.path}`;
+            img.style.width= file.finalWidth+"px";
+            img.style.height= file.finalHeight + "px";
             delete_btn.id = "delete";
             delete_btn.dataset.id = id;
             delete_btn.innerText = "delete";
-            // console.log(file._id);
-            // console.log(delete_btn);
+            
+            dropdown.innerHTML = `
+                <div class="dropdown">
+                    <button class="menu-btn" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    
+                    <ul class="dropdown-menu">
+                        <li><button class="dropdown-item download-btn">Download</button></li>
+                        <li><button id="delete" class="dropdown-item delete_btn text-danger">Delete</button></li>
+                    </ul>
+                </div>`;
+                const deleteBtn = dropdown.querySelector(".delete_btn");
+                deleteBtn.addEventListener("click", async () => {
+                const id = file._id;
+                console.log(id);
+                await axios.delete(`${API}/api/file/${id}`, authHeader);
+                li.remove();
+            })
             const a = document.createElement('a');
             a.href = `${API}/${file.path}`;
-            // a.innerText = file.filename
             a.target = "_blank";
             delete_btn.addEventListener("click", async (e) => {
                 const id = e.currentTarget.dataset.id;
@@ -117,30 +162,12 @@ async function showFiles() {
                 await axios.delete(`${API}/api/file/${id}`, authHeader);
                 li.remove();
             })
-
             a.appendChild(img);
             li.appendChild(a);
-            const dropdown = document.createElement("div");
-
-dropdown.innerHTML = `
-<div class="dropdown">
-    <button class="menu-btn" data-bs-toggle="dropdown">
-        <i class="bi bi-three-dots-vertical"></i>
-    </button>
-
-    <ul class="dropdown-menu">
-        <li><button class="dropdown-item download-btn">Download</button></li>
-        <li><button class="dropdown-item delete-btn text-danger">Delete</button></li>
-    </ul>
-</div>
-`;
-
-li.appendChild(dropdown.firstElementChild);
-            // li.appendChild(delete_btn);
-            // li.appendChild(dwnld);
-            li.appendChild(button_div);
+            li.appendChild(dropdown.firstElementChild);
+            // li.appendChild(button_div);
             li.appendChild(checkbox);
-            ul.appendChild(li);
+            rowDiv.appendChild(li);
         } else if (file.MimeType === "application/pdf") {
             const iframe = document.createElement("iframe");
             iframe.src = `${API}/${file.path}#toolbar=0`;
@@ -165,55 +192,54 @@ li.appendChild(dropdown.firstElementChild);
             li.appendChild(link);
             li.appendChild(delete_btn);
             ul.appendChild(li);
-        }else if (file.MimeType.startsWith("video/")) {
+        }
+        else if (file.MimeType.startsWith("video/")) {
 
-    const video = document.createElement("video");
-    video.src = `${API}/${file.path}`;
-    video.controls = true;
-    video.width = 200;
-    video.preload = "metadata";
-
-    delete_btn.id = "delete";
-    delete_btn.dataset.id = id;
-    delete_btn.innerText = "Delete";
-
-    delete_btn.addEventListener("click", async (e) => {
-        const id = e.currentTarget.dataset.id;
-        await axios.delete(`${API}/api/file/${id}`, authHeader);
-        li.remove();
-    });
-
-    const a = document.createElement("a");
-    a.href = `${API}/${file.path}`;
-    a.target = "_blank";
-
-    a.appendChild(video);
-
-    li.appendChild(a);
-    li.appendChild(button_div);
-    li.appendChild(checkbox);
-
-    ul.appendChild(li);
-}
+            const video = document.createElement("video");
+            video.src = `${API}/${file.path}`;
+            video.controls = true;
+            video.width = 200;
+            video.preload = "metadata";
+            delete_btn.id = "delete";
+            delete_btn.dataset.id = id;
+            delete_btn.innerText = "Delete";
+            delete_btn.addEventListener("click", async (e) => {
+                const id = e.currentTarget.dataset.id;
+                await axios.delete(`${API}/api/file/${id}`, authHeader);
+                li.remove();
+            });
+            const a = document.createElement("a");
+            a.href = `${API}/${file.path}`;
+            a.target = "_blank";
+            a.appendChild(video);
+            li.appendChild(a);
+            li.appendChild(button_div);
+            li.appendChild(checkbox);
+            ul.appendChild(li);
+        }
+        }
+        ul.appendChild(rowDiv);
     }
 }
 // showFiles();
 async function sendManyFiles() {
-    const file_input_field = document.getElementById("Manyfile");
+    console.log("send files is running");
+    const file_input_field = document.getElementsByClassName("Manyfile");
     const files = document.getElementById("Manyfile").files;
     const formData = new FormData();
     // const Show_percent_on_frontend = document.getElementById("percent");
     for (let file of files) {
         formData.append("files", file);
     }
-    
 
-    await axios.post(`${API}/api/uploadMany`, formData, {...authHeader, onUploadProgress: function (progressEvent) {
+
+    await axios.post(`${API}/api/uploadMany`, formData, {
+        ...authHeader, onUploadProgress: function (progressEvent) {
             // console.log(progressEvent);
-const confirmation = document.getElementById("confirmation");
+            const confirmation = document.getElementById("confirmation");
             const percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
             document.getElementById("progressBar").style.width = `${percent}%`;
-             document.getElementById("progressBar").innerText = `${percent}%`;
+            document.getElementById("progressBar").innerText = `${percent}%`;
             // document.getElementById("progressText").textContent = `${percent}%`;
             // console.log(percent);
             // Show_percent_on_frontend.innerText = percent;   
@@ -229,8 +255,8 @@ const confirmation = document.getElementById("confirmation");
     // console.log("sending files ");
 
     showFiles();
-
 }
+
 async function DeleteSelected() {
     console.log("delete Selected Running");
 
@@ -251,16 +277,21 @@ async function DeleteSelected() {
     id_to_delete_many.clear();
     // showFiles();
 }
-
+const DeleteSelectBtn= document.getElementById("DeleteSelectedBtn");
+      DeleteSelectBtn.addEventListener("click",()=>{
+        DeleteSelected();
+      })
 const fileInput = document.getElementById("Manyfile");
 const uploadBtn = document.getElementById("uploadBtn");
-
+uploadBtn.addEventListener("click", ()=>{
+    sendManyFiles();
+})
 fileInput.addEventListener("change", () => {
 
-    if(fileInput.files.length > 0){
+    if (fileInput.files.length > 0) {
         uploadBtn.classList.remove("d-none");
         uploadBtn.textContent = `Upload ${fileInput.files.length} File${fileInput.files.length > 1 ? "s" : ""}`;
-    }else{
+    } else {
         uploadBtn.classList.add("d-none");
     }
 
@@ -276,7 +307,10 @@ refreshIcon.addEventListener("click", () => {
         refreshIcon.classList.remove("spin");
     }, 3000);
 });
-
+const mobileuploadBtn = document.getElementById("hiddenuploadBtn");
+mobileuploadBtn.addEventListener("click", ()=>{
+    sendManyFiles();
+})
 
 showFiles();
 

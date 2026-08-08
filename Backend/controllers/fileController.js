@@ -2,6 +2,8 @@ const express = require("express");
 const file = require('../models/file.js');
 const fs = require("fs");
 const path = require('path');
+const { imageSizeFromFile } = require("image-size/fromFile");
+const { log } = require("console");
 // const auth = require("./middlewares/auth");
 // const upload = multer({ storage: storage });
 async function insert(filename, originalname, MimeType, size, path, userId) {
@@ -27,21 +29,71 @@ async function upload_single(req, res) {
     message: "File uploaded successfully"
   });
 }
+
+
+
 async function upload_multiple(req, res) {
   const allFiles = req.files;
-  const filesData = allFiles.map(file => ({
-    filename: file.filename,
-    originalname: file.originalname,
-    MimeType: file.mimetype,
-    size: file.size,
-    path: file.path,
-    createdAt: new Date(),
-    userId: req.userId
-  }))
+  const filesData = [];
+
+for (const file of allFiles) {
+
+    let width = null;
+    let height = null;
+
+    if (file.mimetype.startsWith("image/")) {
+        const dimensions = await imageSizeFromFile(file.path);
+        console.log(dimensions);
+        width = dimensions.width;
+        height = dimensions.height;
+    }
+
+    filesData.push({
+        filename: file.filename,
+        originalname: file.originalname,
+        MimeType: file.mimetype,
+        size: file.size,
+        path: file.path,
+        width,
+        height,
+        createdAt: new Date(),
+        userId: req.userId
+    });
+}
+//   const filesData = allFiles.map(file => {
+
+//   let width = null;
+//   let height = null;
+
+//   if (file.mimetype.startsWith("image/")) {
+
+//     const dimensions = await imageSizeFromFile(file.path);
+//     console.log(dimensions);
+//     width = dimensions.width;
+//     height = dimensions.height;
+//   }
+
+//   return {
+//     filename: file.filename,
+//     originalname: file.originalname,
+//     MimeType: file.mimetype,
+//     size: file.size,
+//     path: file.path,
+
+//     width,
+//     height,
+
+//     createdAt: new Date(),
+//     userId: req.userId
+//   };
+// });
   await file.insertMany(filesData);
   // console.log("uploaded files");
   res.send("files Uploaded successfully")
 }
+
+
+
 async function get_files(req, res) {
   const data = await file.find({ userId: req.userId });
   // console.log(data);

@@ -7,7 +7,9 @@ const fileSchema = new mongoose.Schema({
     size:Number,
     path:String,
     createdAt:Number,
-    userId:String
+    userId:String,
+    width:Number,
+    height:Number
 });
 
 module.exports = mongoose.model("fileSchema",fileSchema);

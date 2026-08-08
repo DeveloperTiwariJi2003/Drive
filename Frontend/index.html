@@ -1,32 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="data" id="file">
-        <button type="button" onclick="sendData()">SendFile</button>
-    </form>
-    <button type="button" onclick="showFiles()">showFiles</button>
-    
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="data" id="Manyfile" multiple />
-        <button type="button" onclick="sendManyFiles()">Send</button>
-    </form>
-    <ul id="files">
-    </ul>
-    <p id="confirmation"></p>
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="script.js"></script>
-</body>
-</html> -->
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,203 +10,7 @@
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      background: #f5f7fb;
-      color: #1f1f1f;
-      padding: 18px;
-    }
-
-    .file-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      background: white;
-
-      box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
-    }
-
-    .dashboard {
-      width: 95%;
-      margin: 0 auto;
-    }
-
-    .header {
-      margin-bottom: 18px;
-    }
-
-    .header h1 {
-      font-size: 30px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .header p {
-      color: #666;
-      font-size: 15px;
-    }
-
-    .ribbon {
-      height: 78px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #ffffff;
-      border: 1px solid #e6e6e6;
-      border-radius: 16px;
-      padding: 12px 14px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-      margin-bottom: 18px;
-    }
-
-    .file-card img,
-    .file-card iframe {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .selection-bar {
-      flex: 1;
-      height: 52px;
-      border: 1px dashed #cfcfcf;
-      border-radius: 12px;
-      background: #fafafa;
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      overflow: hidden;
-    }
-
-    .selection-bar input[type="file"] {
-      width: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .upload-btn {
-      height: 52px;
-      min-width: 140px;
-      border: none;
-      border-radius: 12px;
-      background: #111;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s ease;
-      padding: 0 18px;
-    }
-
-    .upload-btn:hover {
-      background: #000;
-    }
-
-    .panel {
-      background: #fff;
-      border: 1px solid #e6e6e6;
-      border-radius: 18px;
-      padding: 24px 28px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .panel h2 {
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    .panel .subtext {
-      color: #666;
-      margin-bottom: 18px;
-      font-size: 15px;
-    }
-
-    #confirmation {
-      margin-top: 1px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #0a7a2f;
-      min-height: 20px;
-    }
-    .spin {
-    animation: spin 1s linear infinite;
-}
-  #files {
-    column-count: 5;
-    column-gap: 10px;
-    list-style: none;
-    padding: 0;
-}
-
-.photo-item {
-    break-inside: avoid;
-    margin-bottom: 10px;
-}
-
-.photo-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 8px;
-}
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-#refreshIcon {
-    cursor: pointer;
-}
-.photo-card {
-    position: relative;
-    display: inline-block;
-}
-
-.menu-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    border: none;
-    background: rgba(0,0,0,.5);
-    color: white;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-}
-
-.menu-btn:hover {
-    background: rgba(0,0,0,.8);
-}
-    @media (max-width: 640px) {
-      .ribbon {
-        flex-direction: column;
-        height: auto;
-        align-items: stretch;
-      }
-
-      .upload-btn {
-        width: 100%;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -249,56 +24,68 @@
       </button>
 
       <!-- Right Side -->
-      <div class="d-flex align-items-center gap-3 ms-auto">
+      <div class="nav_Right">
 
+          <!-- desktop COntrols -->
+        <div class="desktop-controls">
         <!-- Upload Form select button and refresh button-->
-        <button id="selectBtn" type="button" class="btn btn-primary" onclick="toggleSelectionMode()">Select</button>
+        <button id="selectBtn" type="button" class="btn btn-primary" >Select</button>
         <form id="uploadForm" class="d-flex align-items-center gap-2">
 
-          <input type="file" name="data" id="Manyfile" class="form-control" style="width:250px;"
+          <input type="file" name="data" id="Manyfile" class="form-control Manyfile" style="width:250px;"
             value="select files to upload" multiple />
-
-          <button id="uploadBtn" type="button" class="btn btn-dark d-none" onclick="sendManyFiles();">
+          <button id="uploadBtn" type="button" class="btn btn-dark d-none">
             Upload
           </button>
           <i id="refreshIcon" class="bi bi-arrow-repeat"></i>
         </form>
-
         <!-- Search Form -->
         <form class="d-flex" role="search">
-
           <input class="form-control me-2" type="search" placeholder="Search">
-
           <button class="btn btn-outline-success" type="submit">
             Search
           </button>
 
         </form>
-
+        <!-- mobile controls -->
       </div>
+        <div class="mobile-controls">
 
+        <button class="icon-btn" id="searchBtn" title="Search">&#128269;</button> <!-- magnifying glass -->
+      <button class="icon-btn" id="mobileuploadBtn" title="Upload">&#43;</button> <!-- plus icon -->
+      <button class="icon-btn" id="menuBtn" title="More">&#8942;</button> <!-- 3 dots -->
+    </div>
+      </div>
+    </div>
+    <!-- Dropdown for 3 dots -->
+    <div class="Nav_dropdown" id="dropdownMenu">
+      <!-- <button>Select files</button> -->
+      <button id="mobileSelectBtn" type="button" class="btn btn-primary">Select files</button>
+    </div>
+
+    <!-- Hidden upload input for mobile -->
+    <div class="flex" id="mobileUpload">
+      <input type="file">
+      <button id="hiddenuploadBtn" type="button" class="Manyfile btn btn-primary">upload</button>
+    </div>
+
+    <!-- Hidden search input for mobile this is ok-->
+    <div id="mobileSearch">
+      <input type="search" placeholder="Search...">
+      <button type="button" class="btn btn-primary">Select files</button>
     </div>
   </nav>
-  <div class="">
-
     <div class="progress" role="progressbar" aria-label="Default striped example" aria-valuenow="10" aria-valuemin="0"
       aria-valuemax="100" style="height: 10px">
       <div id="progressBar" class="progress-bar progress-bar-striped" style="width:0%;">
         <p id="progressText"></p>
       </div>
     </div>
-
-  </div>
-
-
-
-
-
-
   <div class="dashboard">
-    <button id="DeleteSelectedBtn" type="button" onclick="DeleteSelected()" style="display:none; ">Delete Files</button>
+    <button id="DeleteSelectedBtn" type="button" style="display:none; ">Delete Files</button>
     <div>
       <div id="confirmation"></div>
+      
       <h2>Uploaded Files</h2>
       <!-- cards will appear in ul  -->
       <ul id="files">
@@ -308,7 +95,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
+  <script src="script_for_mobile_nav.js"></script>
 </body>
 
 </html>

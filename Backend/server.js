@@ -19,7 +19,6 @@ const fileRoutes = require("./routes/fileRoutes.js");
 app.use(fileRoutes);
 
 
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`server is up at port ${PORT}`);
