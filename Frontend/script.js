@@ -40,7 +40,7 @@ selectBtn.addEventListener("click",()=>{
 })
 const mobileSelectBtn = document.getElementById("mobileSelectBtn");
 mobileSelectBtn.addEventListener("click",()=>{
-    toggleSelectionMode();
+    toggleSelectionMode()
 })
 async function showFiles() {
     let res;
