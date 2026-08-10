@@ -32,12 +32,12 @@ async function analyzeImage(imagePath) {
             {
                 text: `
                     Analyze this image for a personal Drive application.
-
+                    and 
                     Return:
                     1. A short description of the image.
                     2. A list of useful search tags.
 
-                    Return ONLY valid JSON in this format:
+                    Return ONLY valid JSON in this format without markdown fences:
                     {
                         "description": "...",
                         "tags": ["...", "..."]
