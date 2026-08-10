@@ -9,7 +9,8 @@ const fileSchema = new mongoose.Schema({
     createdAt:Number,
     userId:String,
     width:Number,
-    height:Number
+    height:Number,
+    duration:Number,
 });
 
 module.exports = mongoose.model("fileSchema",fileSchema);

@@ -4,6 +4,35 @@ const fs = require("fs");
 const path = require('path');
 const { imageSizeFromFile } = require("image-size/fromFile");
 const { log } = require("console");
+const ffmpeg = require("fluent-ffmpeg");
+
+ffmpeg.setFfprobePath(
+    "C:\\Users\\goura\\Downloads\\ffmpeg-9.0-essentials_build\\bin\\ffprobe.exe"
+);
+//  this function is written by AI
+function getVideoMetadata(filePath) {
+    return new Promise((resolve, reject) => {
+
+        ffmpeg.ffprobe(filePath, (err, metadata) => {
+
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            const videoStream = metadata.streams.find(
+                stream => stream.codec_type === "video"
+            );
+
+            resolve({
+                width: videoStream.width,
+                height: videoStream.height,
+                duration: metadata.format.duration
+            });
+        });
+
+    });
+}
 // const auth = require("./middlewares/auth");
 // const upload = multer({ storage: storage });
 async function insert(filename, originalname, MimeType, size, path, userId) {
@@ -40,13 +69,20 @@ for (const file of allFiles) {
 
     let width = null;
     let height = null;
-
+    let duration =null;
     if (file.mimetype.startsWith("image/")) {
         const dimensions = await imageSizeFromFile(file.path);
         console.log(dimensions);
         width = dimensions.width;
         height = dimensions.height;
-    }
+    }else if (file.mimetype.startsWith("video/")) {
+
+            const metadata = await getVideoMetadata(file.path);
+
+            width = metadata.width;
+            height = metadata.height;
+            duration = metadata.duration;
+        }
 
     filesData.push({
         filename: file.filename,
@@ -56,6 +92,7 @@ for (const file of allFiles) {
         path: file.path,
         width,
         height,
+        duration,
         createdAt: new Date(),
         userId: req.userId
     });
