@@ -5,7 +5,7 @@ const path = require('path');
 const { imageSizeFromFile } = require("image-size/fromFile");
 const { log } = require("console");
 const ffmpeg = require("fluent-ffmpeg");
-
+const analyzeImage = require("../Ai/analyzeImage.js");
 ffmpeg.setFfprobePath(
     "C:\\Users\\goura\\Downloads\\ffmpeg-9.0-essentials_build\\bin\\ffprobe.exe"
 );
@@ -64,7 +64,8 @@ async function upload_single(req, res) {
 async function upload_multiple(req, res) {
   const allFiles = req.files;
   const filesData = [];
-
+  // console.log("allfiles",allFiles);
+  
 for (const file of allFiles) {
 
     let width = null;
@@ -85,6 +86,7 @@ for (const file of allFiles) {
         }
 
     filesData.push({
+
         filename: file.filename,
         originalname: file.originalname,
         MimeType: file.mimetype,
@@ -97,36 +99,15 @@ for (const file of allFiles) {
         userId: req.userId
     });
 }
-//   const filesData = allFiles.map(file => {
-
-//   let width = null;
-//   let height = null;
-
-//   if (file.mimetype.startsWith("image/")) {
-
-//     const dimensions = await imageSizeFromFile(file.path);
-//     console.log(dimensions);
-//     width = dimensions.width;
-//     height = dimensions.height;
-//   }
-
-//   return {
-//     filename: file.filename,
-//     originalname: file.originalname,
-//     MimeType: file.mimetype,
-//     size: file.size,
-//     path: file.path,
-
-//     width,
-//     height,
-
-//     createdAt: new Date(),
-//     userId: req.userId
-//   };
-// });
-  await file.insertMany(filesData);
-  // console.log("uploaded files");
+  const insertedFiles=await file.insertMany(filesData);
   res.send("files Uploaded successfully")
+  for (const Uploadedfile of insertedFiles) {
+      const Airesponse = await analyzeImage(Uploadedfile.path);
+      console.log(Airesponse);
+      await file.findByIdAndUpdate(Uploadedfile._id,{ai:Airesponse})
+  }
+  // console.log("uploaded files");
+  
 }
 
 
@@ -141,7 +122,7 @@ async function delete_file(req, res) {
   try {
     const id = req.params.id;
     // console.log(id);
-    const foundFile = await file.findOne({ _id: id });
+    const foundFile = await file.find({ _id: id });
     // console.log(foundFile)
     if (foundFile.userId !== req.userId) { return res.status(404).send("Unauthorised user") }
     if (!foundFile) return res.status(404).send("File Not Found");

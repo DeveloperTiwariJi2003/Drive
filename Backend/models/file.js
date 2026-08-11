@@ -11,6 +11,10 @@ const fileSchema = new mongoose.Schema({
     width:Number,
     height:Number,
     duration:Number,
+    ai: {
+    description: String,
+    tags: [String]
+}
 });
 
 module.exports = mongoose.model("fileSchema",fileSchema);

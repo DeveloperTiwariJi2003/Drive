@@ -16,8 +16,12 @@ const ai = new GoogleGenAI({
 
 
 // console.log(imagePath);
-async function analyzeImage(imagePath) {
-
+async function analyzeImage(DBpath) {
+    const imagePath = path.join(
+    __dirname,
+    "..",
+    DBpath
+);
     const imageData = fs.readFileSync(imagePath);
 
     const response = await ai.models.generateContent({
@@ -48,6 +52,6 @@ async function analyzeImage(imagePath) {
     });
     // console.log(response.text);
     
-    return response.text;
+    return JSON.parse(response.text);
 }
 module.exports = analyzeImage;

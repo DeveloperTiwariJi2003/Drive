@@ -59,6 +59,16 @@ async function showFiles() {
     const targetHeight = gallery.clientWidth / desiredImages;
 
     const layout = gallery_layout(res.data, gallery.clientWidth, targetHeight);
+    console.table(
+    layout[0].map(file => ({
+        name: file.originalname,
+        mime: file.MimeType,
+        width: file.width,
+        height: file.height,
+        finalWidth: file.finalWidth,
+        finalHeight: file.finalHeight
+    }))
+);
     // console.log(layout);
     const ul = document.getElementById('files');
     ul.innerHTML = "";
@@ -191,7 +201,8 @@ async function showFiles() {
                 const video = document.createElement("video");
                 video.src = `${API}/${file.path}`;
                 video.controls = true;
-                video.width = 200;
+                video.style.width = file.finalWidth + "px";
+                video.style.height = file.finalHeight + "px";
                 video.preload = "metadata";
                 delete_btn.id = "delete";
                 delete_btn.dataset.id = id;
@@ -206,9 +217,10 @@ async function showFiles() {
                 a.target = "_blank";
                 a.appendChild(video);
                 li.appendChild(a);
-                li.appendChild(button_div);
-                li.appendChild(checkbox);
-                ul.appendChild(li);
+li.appendChild(button_div);
+
+li.appendChild(checkbox);   
+rowDiv.appendChild(li);
             }
         }
         ul.appendChild(rowDiv);
@@ -254,9 +266,6 @@ async function sendManyFiles(files) {
     progressBar.innerText = "";
     confirmation.innerText = "";
 }, 3000);
-setTimeout(() => {
-    confirmation.innerText = "";
-}, 5000);
 
         // Clear file input
         file_input_field.value = "";
@@ -270,6 +279,9 @@ setTimeout(() => {
 
         console.error(error);
     }
+    setTimeout(() => {
+    confirmation.innerText = "";
+}, 5000);
     showFiles();
 }
 
