@@ -10,4 +10,5 @@ router.post('/api/upload',auth, upload.single('data'),fileController.upload_sing
 router.post('/api/uploadMany',auth, upload.array('files', 100),fileController.upload_multiple);
 router.delete('/api/file/:id',auth,fileController.delete_file);
 router.post('/api/deleteMany',auth,fileController.deleteselected);
+router.get('/api/ai/search',auth,fileController.AiSearch);
 module.exports = router;

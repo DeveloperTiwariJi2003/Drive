@@ -163,4 +163,23 @@ async function deleteselected(req, res) {
   }
   return res.send("done");
 }
-module.exports = { upload_single, upload_multiple, get_files, delete_file, deleteselected };
+async function AiSearch(req,res){
+  const query = req.query.q;
+  console.log(req.userId);
+  console.log(query)
+  const results = await file.find({
+    userId:req.userId,
+    $or:[
+      {
+        "ai.description":{$regex: query,
+                    $options: "i"},
+
+      },
+      {"ai.tags":{$regex: query,
+                    $options: "i"}}
+
+    ]
+  })
+  console.log(results)
+}
+module.exports = { upload_single, upload_multiple, get_files, delete_file, deleteselected,AiSearch };

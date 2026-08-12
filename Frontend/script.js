@@ -359,6 +359,12 @@ uploadBtn.addEventListener("click", () => {
     sendManyFiles(files);
     uploadBtn.classList.add("d-none");
 })
+const ComputerSearchBar = document.getElementById("ComputerSearchBar");
+const ComputerSearchBarButton = document.getElementById("ComputerSearchBarButton");
+ComputerSearchBarButton.addEventListener("click",async ()=>{
+    console.log(ComputerSearchBar.value);
+    await axios.get(`${API}/api/ai/search?q=${encodeURIComponent(ComputerSearchBar.value)}`,authHeader);
+})
 showFiles();
 
 
