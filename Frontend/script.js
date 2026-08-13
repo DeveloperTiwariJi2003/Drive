@@ -372,6 +372,14 @@ ComputerSearchBarButton.addEventListener("click",async ()=>{
     console.log(aiResponse.data);
     showFiles(aiResponse)
 })
+const mobileSearchInput = document.getElementById("mobileSearchInput");
+const mobileSearchButton = document.getElementById("mobileSearchButton");
+mobileSearchButton.addEventListener("click",async ()=>{
+    console.log(mobileSearchInput.value);
+    const aiResponse = await axios.get(`${API}/api/ai/search?q=${encodeURIComponent(mobileSearchInput.value)}`,authHeader);
+    console.log(aiResponse.data);
+    showFiles(aiResponse)
+})
 showFiles();
 
 
