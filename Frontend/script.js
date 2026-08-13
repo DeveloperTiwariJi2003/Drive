@@ -35,9 +35,12 @@ function toggleSelectionMode() {   //this one is for select and cancel button
     // showFiles();
 }
 
-async function showFiles() {
+async function showFiles(searchResult) {
     let res;
-    try {
+    if(searchResult){
+        res = searchResult;
+    }else{
+        try {
         res = await axios.get(
             `${API}/api/files`,
             authHeader
@@ -52,6 +55,8 @@ async function showFiles() {
         }
 
     }
+    }
+    
     // console.log("res.data = " , res.data);
     const gallery = document.getElementById("files");
     const desiredImages = gallery.clientWidth < 600 ? 5 : 10;
@@ -363,7 +368,9 @@ const ComputerSearchBar = document.getElementById("ComputerSearchBar");
 const ComputerSearchBarButton = document.getElementById("ComputerSearchBarButton");
 ComputerSearchBarButton.addEventListener("click",async ()=>{
     console.log(ComputerSearchBar.value);
-    await axios.get(`${API}/api/ai/search?q=${encodeURIComponent(ComputerSearchBar.value)}`,authHeader);
+    const aiResponse = await axios.get(`${API}/api/ai/search?q=${encodeURIComponent(ComputerSearchBar.value)}`,authHeader);
+    console.log(aiResponse.data);
+    showFiles(aiResponse)
 })
 showFiles();
 

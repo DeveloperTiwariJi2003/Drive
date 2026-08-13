@@ -180,6 +180,6 @@ async function AiSearch(req,res){
 
     ]
   })
-  console.log(results)
+  return res.send(results);
 }
 module.exports = { upload_single, upload_multiple, get_files, delete_file, deleteselected,AiSearch };
