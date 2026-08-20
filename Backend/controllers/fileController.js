@@ -99,8 +99,9 @@ for (const file of allFiles) {
         userId: req.userId
     });
 }
-  const insertedFiles=await file.insertMany(filesData);
+  const insertedFiles = await file.insertMany(filesData);
   res.send("files Uploaded successfully")
+  console.log(insertedFiles);
   for (const Uploadedfile of insertedFiles) {
       const Airesponse = await analyzeImage(Uploadedfile.path);
       console.log(Airesponse);
